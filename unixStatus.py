@@ -66,6 +66,7 @@ def sub_dirs(dirToCheck):
     fileCount = 0
     dirCount = 0
     linkcount = 0
+    #topfiles = []
 
     for items in os.listdir(dirToCheck):
         # This will check for dirs
@@ -91,9 +92,26 @@ def sub_dirs(dirToCheck):
 def top_5(dirToCheck):
     # Up to 5 largest files
     # Up to 5 largest directories
-    fileCommand = "du -a " + str(dirToCheck) + " |sort -n -r |head -n 5"
+    #fileCommand = "du -a " + str(dirToCheck) + " |sort -n -r |head -n 5"
+    fileCommand = "find " + str(dirToCheck) + " -type f -exec ls -al {} \; | sort -nr -k5 | head -n 5"
     print("Top 5 largest files & dirs within {}\n".format(dirToCheck))
     os.system(fileCommand)
+'''
+def filesizeTest(dirToCheck):
+    from os.path import getsize
+    files_list = []
+    for path, dirs, files in os.walk(dirToCheck):
+        files_list.extend([(os.path.join(path, file), getsize(os.path.join(path, file))) for file in files])
+    files_list.sort(key = lambda x: x[1], reverse=True)
+#slicing the list with [:5] will only pass items from 0 to 4
+    return files_list[:5]
+
+def filesizeTest(dirToCheck):
+    all_files = ( os.path.join(basedir, filename) for basedir, dirs, files in os.walk(dirpath) for filename in files   )
+    # make a generator for tuples of file path and size: ('/Path/to/the.file', 1024)
+    files_and_sizes = ( (path, os.path.getsize(path)) for path in all_files )
+    sorted_files_with_size = sorted( files_and_sizes, key = operator.itemgetter(1) )
+'''
 
 '''
 #pointless
@@ -120,5 +138,15 @@ def main():
     #links(dirToCheck)
     top_5(dirToCheck)
     print("\n\n")
+   # filesT = filesizeTest(dirToCheck)
+   # print(*filesT, sep = '\n')
+    #print(filesT)
 if __name__ == "__main__":
     main()
+
+
+
+
+
+
+
